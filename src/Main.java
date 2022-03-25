@@ -26,6 +26,44 @@ public class Main implements StudentsEnrolmentManager {
         int option = obj.nextInt();
         return option;
     }
+    public static boolean verification(String sID, String Course){
+        boolean check  = true;
+        int i = 0;
+        for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+            if(studentsEnrolment.getStudents().getId().equals(sID)){
+                if(studentsEnrolment.getCourses().getCourseId().equals(Course)){
+
+                        check = false;
+                        break;
+
+
+
+                }
+            }
+            i = i + 1;
+        }
+        System.out.println(i);
+        return check;
+
+    }
+    public int getIndex(String sID, String Course){
+        int i = 0;
+        for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+            if(studentsEnrolment.getStudents().getId().equals(sID)){
+                if(studentsEnrolment.getCourses().getCourseId().equals(Course)){
+
+
+                    break;
+
+
+
+                }
+            }
+            i = i + 1;
+        }
+        System.out.println(i);
+        return i;
+    }
 
 
     public static String readFile(){
@@ -84,7 +122,7 @@ public class Main implements StudentsEnrolmentManager {
         List<List<String>> al = new ArrayList<>();
         al = data;
         switch (type){
-            case"student" :{
+            case"student":{
                 fileWriter.write("Course");
                 fileWriter.append(',');
                 fileWriter.write("Course id");
@@ -111,6 +149,8 @@ public class Main implements StudentsEnrolmentManager {
                 break;
             }
             case"sem":{
+                fileWriter.write("Courses in this sem: ");
+                fileWriter.write("\n");
                 fileWriter.write("Course");
                 fileWriter.append(',');
                 fileWriter.write("Course id");
@@ -122,6 +162,24 @@ public class Main implements StudentsEnrolmentManager {
                     fileWriter.write("\n");
                 }
                 break;
+            }
+            case"update":{
+                System.out.println(al);
+                fileWriter.write("StudentID");
+                fileWriter.append(',');
+                fileWriter.write("Course ID");
+                fileWriter.append(',');
+                fileWriter.write("Sem");
+                fileWriter.write("\n");
+                for (int i=0; i<al.size(); i++){
+                    fileWriter.write((al.get(i)).get(0).split(",")[0]);
+                    fileWriter.append(',');
+                    fileWriter.write((al.get(i)).get(0).split(",")[1]);
+                    fileWriter.append(',');
+                    fileWriter.write((al.get(i)).get(0).split(",")[2]);
+                    fileWriter.write("\n");
+
+                }
             }
         }
 
@@ -144,10 +202,122 @@ public class Main implements StudentsEnrolmentManager {
         return check;
     }
 
-    public void Update(){
 
-    }
-    public void Delete(){
+    public void Update() throws IOException {
+        List<List<String>> al = new ArrayList<>();
+        Students result1 = null;
+        Courses result2 = null;
+        Scanner obj2 = new Scanner(System.in);
+        System.out.println("Here is the list of Student: ");
+        for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+            System.out.println(studentsEnrolment.getStudents().getId() + " || " + studentsEnrolment.getStudents().getName());
+        }
+        String studentSearch = obj.nextLine();
+        for (StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+            if(studentsEnrolment.getStudents().getId().equalsIgnoreCase(studentSearch)){
+                System.out.println(studentsEnrolment.getStudents().getName() + " || " + studentsEnrolment.getStudents().getBirthDate()
+                        + " ||" + studentsEnrolment.getCourses().getCourseId() + " || " + studentsEnrolment.getCourses().getCourseName()
+                        + " || " + studentsEnrolment.getCourses().getNumberOfCredit() + " || " + studentsEnrolment.getSemester());
+            }
+        }
+        for (Students student : studentsList) {
+            if (student.getId().equals(studentSearch))
+                result1 = student;
+        }
+
+        if (result1 == null) {
+            System.out.println("No student available with given ID.");
+            return;
+        }
+        System.out.println("Enter the course code you want to update: ");
+        String courseSearch = obj.nextLine();
+
+        for (Courses course : coursesList) {
+            if (course.getCourseId().equals(courseSearch))
+                result2 = course;
+        }
+        if (result2 == null) {
+            System.out.println("No course available with given ID.");
+            return;
+        }
+
+        System.out.println("Enter the semester");
+        String semSearch = obj2.nextLine();
+        System.out.println(studentsEnrolmentList);
+        if(!(verification(studentSearch,courseSearch))){
+            StudentsEnrolment record = new StudentsEnrolment(result1, result2, semSearch);
+            if (studentsEnrolmentList.contains(record)){
+                System.out.println("Enrolment already existed");
+                return;
+            }
+            al.add(Arrays.asList(studentSearch+ ", " + courseSearch + " , " + semSearch));
+            studentsEnrolmentList.add(record);
+            System.out.println("Do you want to save this course addition?" +
+                    "[1] YES" +
+                    "[2] NO ");
+            String choice = obj.nextLine();
+            switch (choice){
+                case "1":{
+                    System.out.println("Please enter file name");
+                    String fileNameInputed = obj.nextLine();
+                    saveFile("update", fileNameInputed, al);
+                    break;
+                }
+                case "2": System.exit(0);
+            }
+
+
+    }}
+    public void Delete() throws IOException {
+        Students result1 = null;
+        Courses result2 = null;
+        Scanner obj2 = new Scanner(System.in);
+        System.out.println(studentsEnrolmentList);
+        System.out.println("Here is the list of Student: ");
+        for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+            System.out.println(studentsEnrolment.getStudents().getId() + " || " + studentsEnrolment.getStudents().getName());
+        }
+        String studentSearch = obj.nextLine();
+        for (StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+            if(studentsEnrolment.getStudents().getId().equalsIgnoreCase(studentSearch)){
+                System.out.println(studentsEnrolment.getStudents().getName() + " || " + studentsEnrolment.getStudents().getBirthDate()
+                        + " ||" + studentsEnrolment.getCourses().getCourseId() + " || " + studentsEnrolment.getCourses().getCourseName()
+                        + " || " + studentsEnrolment.getCourses().getNumberOfCredit() + " || " + studentsEnrolment.getSemester());
+            }
+        }
+        for (Students student : studentsList) {
+            if (student.getId().equals(studentSearch))
+                result1 = student;
+        }
+
+        if (result1 == null) {
+            System.out.println("No student available with given ID.");
+        }
+        System.out.println("Enter the course code you want to update: ");
+        String courseSearch = obj.nextLine();
+
+        for (Courses course : coursesList) {
+            if (course.getCourseId().equals(courseSearch))
+                result2 = course;
+        }
+        if (result2 == null) {
+            System.out.println("No course available with given ID.");
+        }
+
+        System.out.println("Enter the semester");
+
+        String semSearch = obj2.nextLine();
+        int i = 0;
+        if(!(verification(studentSearch,courseSearch))){
+            i = i+1;
+            StudentsEnrolment record = new StudentsEnrolment(result1, result2, semSearch);
+                studentsEnrolmentList.remove(getIndex(studentSearch,courseSearch));
+                System.out.println("Remove Completely");
+
+        }
+
+//        System.out.println(record);
+
 
     }
     public void Display(String type){
@@ -389,11 +559,15 @@ public class Main implements StudentsEnrolmentManager {
                     break;
                 }
                 case 3:{
+                    system.Delete();
                     break;
                 }
                 case 4:{
-                    System.out.println("4");
+                    system.Update();
                     break;
+                }
+                case 5:{
+                    System.exit(0);
                 }
                 default:{
                     System.out.println("Your choice not found");
@@ -405,25 +579,10 @@ public class Main implements StudentsEnrolmentManager {
 
     }
 
-    public static boolean verification(String sID, String Course, String sem){
-        boolean check = false;
-        for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
-            if(studentsEnrolment.getStudents().getId().equals(sID)){
-                if(studentsEnrolment.getCourses().getCourseId().equals(Course)){
-                    if (semesters.contains(sem)){
-                        check = false;
-                    }
-                }
-            }
-
-        }
-        System.out.println(check);
-        return check;
-    }
-    public static void Add(){
+   public static void Add(){
         Students result1 = null;
         Courses result2 = null;
-
+        System.out.println(studentsEnrolmentList);
         System.out.println("List of available students:");
         for (Students student : studentsList) {
             System.out.println(student.getId() + " " + student.getName());
@@ -462,16 +621,15 @@ public class Main implements StudentsEnrolmentManager {
         if (!(semesters.contains(Sem))) {
             System.out.println("Not an available semester.");
         }
-        if(verification(studentID,courseID,Sem)){
+        if((verification(studentID,courseID))){
         StudentsEnrolment record = new StudentsEnrolment(result1, result2, Sem);
-        if (studentsEnrolmentList.contains(record)){
-            System.out.println("Enrolment already existed");
-            return;
-        }
         studentsEnrolmentList.add(record);
         System.out.println("Success");
         System.out.println(result1.getId() + " " + result1.getName() + ", " + result2.getCourseId()+ " " + result2.getCourseName() + ", " + Sem);
-    }}
+        }else {
+            System.out.println("Your input is already exits");
+        }
+    }
 
 
 }
