@@ -2,6 +2,7 @@ import java.io.*;
 import java.util.*;
 
 public class Main implements StudentsEnrolmentManager {
+    //Attribute
     static Scanner obj = new Scanner(System.in);
     static ArrayList<Courses> coursesList = new ArrayList();
     static ArrayList<Students> studentsList = new ArrayList();
@@ -9,9 +10,9 @@ public class Main implements StudentsEnrolmentManager {
     static String[] semester = {"2020A", "2020B", "2020C","2021A","2021B","2021C","2022A","2022B","2022C","2023A","2023B","2023C","2024A","2024B","2024C"};
     static ArrayList semesters = new ArrayList(Arrays.asList(semester));
 
-    ArrayList<String> saveInfo = new ArrayList<String>();
-
+    //TODO
     public static void welcome(){
+        //Welcome method print out all the options that user can pick to run the program
         System.out.println("welcome to Student Management Program");
         System.out.println("please choose the section you want to do");
         System.out.println("1: display information");
@@ -20,53 +21,44 @@ public class Main implements StudentsEnrolmentManager {
         System.out.println("4: update student information");
         System.out.println("5: exit");
     }
-
     public static int option(){
+        //The method that check user pick at welcome()
         Scanner obj = new Scanner(System.in);
         int option = obj.nextInt();
         return option;
     }
     public static boolean verification(String sID, String Course){
+        //this is the method to verify if student have course inputted by user
         boolean check  = true;
-        int i = 0;
         for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
             if(studentsEnrolment.getStudents().getId().equals(sID)){
                 if(studentsEnrolment.getCourses().getCourseId().equals(Course)){
-
+                    //return false if student have the course that inputted => cancel "add() method"
                         check = false;
                         break;
-
-
-
                 }
             }
-            i = i + 1;
         }
-        System.out.println(i);
         return check;
 
     }
     public int getIndex(String sID, String Course){
+        //A method to get index of student with inputted course that user want to delete
         int i = 0;
         for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
             if(studentsEnrolment.getStudents().getId().equals(sID)){
                 if(studentsEnrolment.getCourses().getCourseId().equals(Course)){
-
-
                     break;
-
-
-
                 }
             }
+            //a loop to count. Then get index and return
             i = i + 1;
         }
-        System.out.println(i);
+//        System.out.println(i);
         return i;
     }
-
-
     public static String readFile(){
+        //A method that whenever launch the program, the system will clone the file "default" to studentsEnrolmentList
         boolean done = false;
         String fileName = "";
         while (!done) {
@@ -77,14 +69,13 @@ public class Main implements StudentsEnrolmentManager {
                 defaultFile = "src/"+fileName;
             }
             String line;
-            String splitBy = ",";
             try {
                 BufferedReader in = new BufferedReader(new FileReader(defaultFile));
 
                 while ((line = in.readLine()) != null) {
 
                     boolean sAdded = false, cAdded = false;
-                    String[] data = line.split(splitBy);
+                    String[] data = line.split(",");
                     for (Students student : studentsList) {
                         if (student.getId().equals(data[0])) {
                             sAdded = true;
@@ -116,11 +107,14 @@ public class Main implements StudentsEnrolmentManager {
         return fileName;
     }
     private static void saveFile(String type, String fileName, List data) throws IOException {
+        //This is the method that can help user to save the file
         String name = "src/"+fileName+".csv";
         File csvFile = new File(name);
         FileWriter fileWriter = new FileWriter(csvFile, true);
+        //Append : true allow to save override to the exit file
         List<List<String>> al = new ArrayList<>();
         al = data;
+        //Cases of saving file in this system
         switch (type){
             case"student":{
                 fileWriter.write("Course");
@@ -184,26 +178,79 @@ public class Main implements StudentsEnrolmentManager {
         }
 
 
-        String re = (al.get(0)).get(0).split(",")[0];
-        String re1 = (al.get(0)).get(0).split(",")[1];
-        System.out.println(re);
-        System.out.println(re1);
+//        String re = (al.get(0)).get(0).split(",")[0];
+//        String re1 = (al.get(0)).get(0).split(",")[1];
+//        System.out.println(re);
+//        System.out.println(re1);
         fileWriter.flush();
         fileWriter.close();
 
 
     }
     public boolean checkFileExist(String fileName){
+        //A method to check whenever user input filename for saving, this method will check if that file exits in the system
         boolean check = false;
         File tempFile =   new File("src/"+fileName+".csv");
         if(tempFile.exists()){
+            //return true if exits
             check = true;
         }
         return check;
     }
+    public static void Add(){
+        //this is Add method, users have to input Id, course and sem
+        Students result1 = null;
+        Courses result2 = null;
+        System.out.println(studentsEnrolmentList);
+        System.out.println("List of available students:");
+        for (Students student : studentsList) {
+            System.out.println(student.getId() + " " + student.getName());
+        }
+        System.out.println("Enter the student ID: ");
+        String studentID = obj.nextLine();
 
+        for (Students student : studentsList) {
+            if (student.getId().equalsIgnoreCase(studentID))
+                result1 = student;
+        }
 
+        if (result1 == null) {
+            System.out.println("No student available with given ID.");
+            return;
+        }
+        System.out.println("List of available courses:");
+        for (StudentsEnrolment studentEnrolment : studentsEnrolmentList) {
+            System.out.println(studentEnrolment.getCourses().getCourseId() + " " + studentEnrolment.getCourses().getCourseName() + " " + studentEnrolment.getCourses().getNumberOfCredit());
+        }
+
+        System.out.println("Enter the course ID: ");
+        String courseID = obj.nextLine();
+
+        for (Courses course : coursesList) {
+            if (course.getCourseId().equalsIgnoreCase(courseID))
+                result2 = course;
+        }
+        if (result2 == null) {
+            System.out.println("No course available with given ID.");
+            return;
+        }
+
+        System.out.println("Enter the semester: ");
+        String Sem = obj.nextLine();
+        if (!(semesters.contains(Sem))) {
+            System.out.println("Not an available semester.");
+        }
+        if((verification(studentID,courseID))){
+            StudentsEnrolment record = new StudentsEnrolment(result1, result2, Sem);
+            studentsEnrolmentList.add(record);
+            System.out.println("Success");
+            System.out.println(result1.getId() + " " + result1.getName() + ", " + result2.getCourseId()+ " " + result2.getCourseName() + ", " + Sem);
+        }else {
+            System.out.println("Your input is already exits");
+        }
+    }
     public void Update() throws IOException {
+        //this is the update method that helps user to update course of one specific student
         List<List<String>> al = new ArrayList<>();
         Students result1 = null;
         Courses result2 = null;
@@ -269,6 +316,7 @@ public class Main implements StudentsEnrolmentManager {
 
     }}
     public void Delete() throws IOException {
+        //this is Delete method that help user delete 1 specific course of student
         Students result1 = null;
         Courses result2 = null;
         Scanner obj2 = new Scanner(System.in);
@@ -321,6 +369,7 @@ public class Main implements StudentsEnrolmentManager {
 
     }
     public void Display(String type){
+        //this is display method, thí will popup when user want to print out the information of the enrollment
         String displayType = type;
         switch (displayType){
             case "students":{
@@ -347,6 +396,7 @@ public class Main implements StudentsEnrolmentManager {
         }
     }
     public void GetOne() throws IOException {
+        //This is the method which can help user to print specific information
         boolean flag =false;
         Scanner obj2 = new Scanner(System.in);
         System.out.println("Do you want to " +
@@ -521,7 +571,8 @@ public class Main implements StudentsEnrolmentManager {
 
     }
     public void GetAll(){
-    if(studentsEnrolmentList.isEmpty()){
+        //this is display method, thí will popup when user want to print out the information of the enrollment
+        if(studentsEnrolmentList.isEmpty()){
         System.out.println("not thing in here");
     }else {
     System.out.println("Here is the report of Students");
@@ -530,7 +581,7 @@ public class Main implements StudentsEnrolmentManager {
     }
     public static void main(String[] args) throws IOException {
 
-        String defaultAction = readFile();
+        readFile();
         int option;
         Main system = new Main();
         do {
@@ -578,58 +629,4 @@ public class Main implements StudentsEnrolmentManager {
 
 
     }
-
-   public static void Add(){
-        Students result1 = null;
-        Courses result2 = null;
-        System.out.println(studentsEnrolmentList);
-        System.out.println("List of available students:");
-        for (Students student : studentsList) {
-            System.out.println(student.getId() + " " + student.getName());
-        }
-        System.out.println("Enter the student ID: ");
-        String studentID = obj.nextLine();
-
-        for (Students student : studentsList) {
-            if (student.getId().equals(studentID))
-                result1 = student;
-        }
-
-        if (result1 == null) {
-            System.out.println("No student available with given ID.");
-            return;
-        }
-        System.out.println("List of available courses:");
-        for (StudentsEnrolment studentEnrolment : studentsEnrolmentList) {
-            System.out.println(studentEnrolment.getCourses().getCourseId() + " " + studentEnrolment.getCourses().getCourseName() + " " + studentEnrolment.getCourses().getNumberOfCredit());
-        }
-
-        System.out.println("Enter the course ID: ");
-        String courseID = obj.nextLine();
-
-        for (Courses course : coursesList) {
-            if (course.getCourseId().equals(courseID))
-                result2 = course;
-        }
-        if (result2 == null) {
-            System.out.println("No course available with given ID.");
-            return;
-        }
-
-        System.out.println("Enter the semester: ");
-        String Sem = obj.nextLine();
-        if (!(semesters.contains(Sem))) {
-            System.out.println("Not an available semester.");
-        }
-        if((verification(studentID,courseID))){
-        StudentsEnrolment record = new StudentsEnrolment(result1, result2, Sem);
-        studentsEnrolmentList.add(record);
-        System.out.println("Success");
-        System.out.println(result1.getId() + " " + result1.getName() + ", " + result2.getCourseId()+ " " + result2.getCourseName() + ", " + Sem);
-        }else {
-            System.out.println("Your input is already exits");
-        }
-    }
-
-
 }
