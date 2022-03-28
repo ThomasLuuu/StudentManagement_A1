@@ -106,6 +106,11 @@ public class Main implements StudentsEnrolmentManager {
         }
         return fileName;
     }
+    public int getRandomNumberUsingNextInt(int min, int max) {
+        //Get random number for saving file
+        Random random = new Random();
+        return random.nextInt(max - min) + min;
+    }
     private static void saveFile(String type, String fileName, List data) throws IOException {
         //This is the method that can help user to save the file
         String name = "src/"+fileName+".csv";
