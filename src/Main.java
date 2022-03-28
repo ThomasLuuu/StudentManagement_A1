@@ -450,7 +450,8 @@ public class Main implements StudentsEnrolmentManager {
                                     break;
                                 }
                                 case "2":{
-                                    System.exit(0);
+                                    saveFile("student",csvFileName, al);
+                                    System.out.println("Save Successfully Override to the file: " + csvFileName + getRandomNumberUsingNextInt(0,100)+ ".csv");
                                     break;
                                 }
 
@@ -477,9 +478,10 @@ public class Main implements StudentsEnrolmentManager {
                         flag = true;
                         al.add(Arrays.asList(dataInput));
 
+
                     }
                 }
-
+                System.out.println(al);
                 if (!flag){
                     System.out.println("Your input is invalid");
                     System.exit(0);
@@ -504,7 +506,8 @@ public class Main implements StudentsEnrolmentManager {
                                     break;
                                 }
                                 case "2":{
-                                    System.exit(0);
+                                    saveFile("student",csvFileName, al);
+                                    System.out.println("Save Successfully Override to the file: " + csvFileName + getRandomNumberUsingNextInt(0,100)+ ".csv");
                                     break;
                                 }
 
@@ -555,7 +558,8 @@ public class Main implements StudentsEnrolmentManager {
                                     break;
                                 }
                                 case "2":{
-                                    System.exit(0);
+                                    saveFile("student",csvFileName, al);
+                                    System.out.println("Save Successfully Override to the file: " + csvFileName + getRandomNumberUsingNextInt(0,100)+ ".csv");
                                     break;
                                 }
 
