@@ -12,6 +12,7 @@ public class Main implements StudentsEnrolmentManager {
     static String[] semester = {"2020A", "2020B", "2020C","2021A","2021B","2021C","2022A","2022B","2022C","2023A","2023B","2023C","2024A","2024B","2024C"};
     static ArrayList semesters = new ArrayList(Arrays.asList(semester));
 
+    //TODO general Methods for processing this app
 
     public static void welcome(){
         //Welcome method print out all the options that user can pick to run the program
