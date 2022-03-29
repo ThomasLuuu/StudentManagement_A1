@@ -16,9 +16,8 @@ public class Main implements StudentsEnrolmentManager {
         System.out.println("please choose the section you want to do");
         System.out.println("1: display information");
         System.out.println("2: add student information");
-        System.out.println("3: delete student information");
-        System.out.println("4: update student information");
-        System.out.println("5: exit");
+        System.out.println("3: update student information");
+        System.out.println("4: exit");
     }
     public static String option(){
         //The method that check user pick at welcome()
@@ -207,33 +206,32 @@ public class Main implements StudentsEnrolmentManager {
         }
         return check;
     }
-    public static void Add(){
+    @Override
+    public void Add(String sID){
         //this is Add method, users have to input Id, course and sem
         Students result1 = null;
         Courses result2 = null;
-        System.out.println(studentsEnrolmentList);
+//        System.out.println(studentsEnrolmentList);
 
 
         try{
-            System.out.println("List of available students:");
-            for (Students student : studentsList) {
-                System.out.println(student.getId() + " " + student.getName());
-            }
+//            System.out.println("List of available students:");
+//            for (Students student : studentsList) {
+//                System.out.println(student.getId() + " " + student.getName());
+//            }
             while (result1 == null){
-                System.out.println("Enter the student ID: ");
-                String studentID = obj.nextLine();
                 for (Students student : studentsList) {
-                    if (student.getId().equalsIgnoreCase(studentID)){
+                    if (student.getId().equalsIgnoreCase(sID)){
                         result1 = student;
                     }
                 }
                 if(result1==null){
-                    System.out.println("There is no "+ studentID + " in the list! Pls re-input" );
+                    System.out.println("There is no "+ sID + " in the list! Pls re-input" );
                 }
             }
             System.out.println("List of available courses:");
-            for (StudentsEnrolment studentEnrolment : studentsEnrolmentList) {
-                System.out.println(studentEnrolment.getCourses().getCourseId() + " " + studentEnrolment.getCourses().getCourseName() + " " + studentEnrolment.getCourses().getNumberOfCredit());
+            for (Courses courses : coursesList) {
+                System.out.println(courses.getCourseId() + " " + courses.getCourseName() + " " + courses.getNumberOfCredit());
             }
             while (result2 ==null){
                 System.out.println("Enter the course ID: ");
@@ -262,88 +260,60 @@ public class Main implements StudentsEnrolmentManager {
             System.out.println("Your input is already exits");
         }
     }
-    public void Update() throws IOException {
+    @Override
+    public void Update()  {
         //this is the update method that helps user to update course of one specific student
-        List<List<String>> al = new ArrayList<>();
-        Students result1 = null;
-        Courses result2 = null;
-        Scanner obj2 = new Scanner(System.in);
-        System.out.println("Here is the list of Student: ");
-        for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
-            System.out.println(studentsEnrolment.getStudents().getId() + " || " + studentsEnrolment.getStudents().getName());
+
+        System.out.println("Enter the student name you want to update: ");
+        for(Students students: studentsList){
+            System.out.println("           " + students.getId() + "          " + students.getName());
         }
         String studentSearch = obj.nextLine();
+        System.out.println("List of courses: ");
         for (StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
-            if(studentsEnrolment.getStudents().getId().equalsIgnoreCase(studentSearch)){
-                System.out.println(studentsEnrolment.getStudents().getName() + " || " + studentsEnrolment.getStudents().getBirthDate()
-                        + " ||" + studentsEnrolment.getCourses().getCourseId() + " || " + studentsEnrolment.getCourses().getCourseName()
-                        + " || " + studentsEnrolment.getCourses().getNumberOfCredit() + " || " + studentsEnrolment.getSemester());
+            if (studentsEnrolment.getStudents().getId().equalsIgnoreCase(studentSearch)){
+                System.out.println(studentsEnrolment.getCourses().getCourseId()+"            " + studentsEnrolment.getCourses().getCourseName());
             }
         }
-        for (Students student : studentsList) {
-            if (student.getId().equals(studentSearch))
-                result1 = student;
-        }
+        System.out.println("[What do you want to do next? ]" +
+                "[ 1 ]: Add course" +
+                "[ 2 ]: Delete course" );
+        String option = obj.nextLine();
 
-        if (result1 == null) {
-            System.out.println("No student available with given ID.");
-            return;
-        }
-        System.out.println("Enter the course code you want to update: ");
-        String courseSearch = obj.nextLine();
-
-        for (Courses course : coursesList) {
-            if (course.getCourseId().equals(courseSearch))
-                result2 = course;
-        }
-        if (result2 == null) {
-            System.out.println("No course available with given ID.");
-            return;
-        }
-
-        System.out.println("Enter the semester");
-        String semSearch = obj2.nextLine();
-        System.out.println(studentsEnrolmentList);
-        if(!(verification(studentSearch,courseSearch))){
-            StudentsEnrolment record = new StudentsEnrolment(result1, result2, semSearch);
-            if (studentsEnrolmentList.contains(record)){
-                System.out.println("Enrolment already existed");
-                return;
-            }
-            al.add(Arrays.asList(studentSearch+ ", " + courseSearch + " , " + semSearch));
-            studentsEnrolmentList.add(record);
-            System.out.println("Do you want to save this course addition?" +
-                    "[1] YES" +
-                    "[2] NO ");
-            String choice = obj.nextLine();
-            switch (choice){
-                case "1":{
-                    System.out.println("Please enter file name");
-                    String fileNameInputed = obj.nextLine();
-                    saveFile("update", fileNameInputed, al);
-                    break;
+            do {
+                try {
+                    switch (option){
+                        case "1": {
+                            Add(studentSearch);
+                            break;
+                        }
+                        case "2":{
+                            Delete(studentSearch);
+                            break;
+                        }
+                    }
+                }catch (InputMismatchException e){
+                    System.out.println("Your program have problem " + e);
                 }
-                case "2": System.exit(0);
-            }
+            }while (true);
 
-
-    }}
-    public void Delete() throws IOException {
+    }
+    public void Delete(String sID) {
         //this is Delete method that help user delete 1 specific course of student
         Students result1 = null;
         Courses result2 = null;
         Scanner obj2 = new Scanner(System.in);
-        System.out.println(studentsEnrolmentList);
-        System.out.println("Here is the list of Student: ");
-        for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
-            System.out.println(studentsEnrolment.getStudents().getId() + " || " + studentsEnrolment.getStudents().getName());
-        }
+//        System.out.println(studentsEnrolmentList);
+//        System.out.println("Here is the list of Student: ");
+//        for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+//            System.out.println(studentsEnrolment.getStudents().getId() + " || " + studentsEnrolment.getStudents().getName());
+//        }
             try{
                 while (result1==null){
-                    System.out.println("Enter Student Number");
-                    String studentSearch = obj.nextLine();
+//                    System.out.println("Enter Student Number");
+//                    String studentSearch = obj.nextLine();
                     for (Students student : studentsList) {
-                        if (student.getId().equals(studentSearch))
+                        if (student.getId().equals(sID))
                             result1 = student;
                     }
                     if (result1==null){
@@ -413,9 +383,9 @@ public class Main implements StudentsEnrolmentManager {
         Scanner obj2 = new Scanner(System.in);
         String option = null;
 
-        System.out.println("Do you want to " +
-                "[1] Print all courses for 1 student in 1 semester. " +
-                "[2] Print all students of 1 course in 1 semester. " +
+        System.out.println("Do you want to do: \n " +
+                "[1] Print all courses for 1 student in 1 semester.\n " +
+                "[2] Print all students of 1 course in 1 semester.\n " +
                 "[3] Prints all courses offered in 1 semester");
         do{
             String option1 = obj.nextLine();
@@ -635,18 +605,36 @@ public class Main implements StudentsEnrolmentManager {
                         break;
                     }
                     case "2":{
-                        system.Add();
+                        String result1 = null;
+                        System.out.println("List of available students:");
+                        for (Students student : studentsList) {
+                            System.out.println(student.getId() + " " + student.getName());
+                        }
+                        while(result1 == null){
+                            try{
+                                System.out.println("Enter the student ID: ");
+                                String studentID = obj.nextLine();
+                                for (Students student : studentsList) {
+                                    if (student.getId().equalsIgnoreCase(studentID)){
+                                        result1 = studentID;
+                                    }
+                                }
+                                if(result1==null){
+                                    System.out.println("There is no "+ studentID + " in the list! Pls re-input" );
+                                }
+
+                            }catch (InputMismatchException e){
+                                System.out.println("Please re-enter your input");
+                            }
+                        }
+                        system.Add(result1);
                         break;
                     }
                     case "3":{
-                        system.Delete();
-                        break;
-                    }
-                    case "4":{
                         system.Update();
                         break;
                     }
-                    case "5":{
+                    case "4":{
                         System.exit(0);
                     }
                     default:{
