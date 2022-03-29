@@ -2,14 +2,17 @@ import java.io.*;
 import java.util.*;
 
 public class Main implements StudentsEnrolmentManager {
-    //Attribute
+
+    //TODO Attribute
+
     static Scanner obj = new Scanner(System.in);
     static ArrayList<Courses> coursesList = new ArrayList();
     static ArrayList<Students> studentsList = new ArrayList();
     static ArrayList<StudentsEnrolment> studentsEnrolmentList = new ArrayList<>();
     static String[] semester = {"2020A", "2020B", "2020C","2021A","2021B","2021C","2022A","2022B","2022C","2023A","2023B","2023C","2024A","2024B","2024C"};
     static ArrayList semesters = new ArrayList(Arrays.asList(semester));
-    //TODO
+
+
     public static void welcome(){
         //Welcome method print out all the options that user can pick to run the program
         System.out.println("welcome to Student Management Program");
@@ -206,6 +209,37 @@ public class Main implements StudentsEnrolmentManager {
         }
         return check;
     }
+    public void Display(String type){
+        //this is display method, thí will popup when user want to print out the information of the enrollment
+        String displayType = type;
+        switch (displayType){
+            case "students":{
+                System.out.println("Here is the list of students: ");
+                for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+                    System.out.println(studentsEnrolment.getStudents().getId() + " || " + studentsEnrolment.getStudents().getName());
+                }
+                break;
+            }
+            case "courses":{
+                System.out.println("Here is the list of courses: ");
+                for (StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
+                    System.out.println(studentsEnrolment.getCourses().getCourseId() + " || " + studentsEnrolment.getCourses().getCourseName());
+                }
+                break;
+            }
+            case "sem":{
+                System.out.println("Here is the list of semester: ");
+                for( String sem: semester){
+                    System.out.println(sem);
+                }
+                break;
+            }
+        }
+    }
+
+
+    //TODO OverRide Methods from Interface
+
     @Override
     public void Add(String sID){
         //this is Add method, users have to input Id, course and sem
@@ -260,6 +294,7 @@ public class Main implements StudentsEnrolmentManager {
             System.out.println("Your input is already exits");
         }
     }
+
     @Override
     public void Update()  {
         //this is the update method that helps user to update course of one specific student
@@ -298,6 +333,8 @@ public class Main implements StudentsEnrolmentManager {
             }while (true);
 
     }
+
+    @Override
     public void Delete(String sID) {
         //this is Delete method that help user delete 1 specific course of student
         Students result1 = null;
@@ -350,33 +387,8 @@ public class Main implements StudentsEnrolmentManager {
 
 
     }
-    public void Display(String type){
-        //this is display method, thí will popup when user want to print out the information of the enrollment
-        String displayType = type;
-        switch (displayType){
-            case "students":{
-                System.out.println("Here is the list of students: ");
-                for(StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
-                    System.out.println(studentsEnrolment.getStudents().getId() + " || " + studentsEnrolment.getStudents().getName());
-                }
-                break;
-            }
-            case "courses":{
-                System.out.println("Here is the list of courses: ");
-                for (StudentsEnrolment studentsEnrolment: studentsEnrolmentList){
-                    System.out.println(studentsEnrolment.getCourses().getCourseId() + " || " + studentsEnrolment.getCourses().getCourseName());
-                }
-                break;
-            }
-            case "sem":{
-                System.out.println("Here is the list of semester: ");
-                for( String sem: semester){
-                    System.out.println(sem);
-                }
-                break;
-            }
-        }
-    }
+
+    @Override
     public void GetOne() throws IOException {
         //This is the method which can help user to print specific information
         boolean flag =false;
@@ -570,6 +582,8 @@ public class Main implements StudentsEnrolmentManager {
 
 
     }
+
+    @Override
     public void GetAll(){
         //this is display method, thí will popup when user want to print out the information of the enrollment
         if(studentsEnrolmentList.isEmpty()){
@@ -579,6 +593,7 @@ public class Main implements StudentsEnrolmentManager {
     System.out.println(studentsEnrolmentList.toString());
     }
     }
+
     public static void main(String[] args) throws IOException {
 
         readFile();
