@@ -3,7 +3,6 @@ public class StudentsEnrolment {
     Courses courses;
     String semester;
 
-
     public Students getStudents(){
         return students;
     }

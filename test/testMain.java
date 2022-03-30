@@ -1,7 +1,8 @@
 import java.io.*;
 import java.util.*;
 
-public class Main implements StudentsEnrolmentManager {
+
+public class testMain implements StudentsEnrolmentManager {
 
     //TODO Attribute
 
@@ -12,10 +13,8 @@ public class Main implements StudentsEnrolmentManager {
     static String[] semester = {"2020A", "2020B", "2020C","2021A","2021B","2021C","2022A","2022B","2022C","2023A","2023B","2023C","2024A","2024B","2024C"};
     static ArrayList semesters = new ArrayList(Arrays.asList(semester));
 
-    //TODO general Methods for processing this app
 
-    public static void welcome(){
-        //Welcome method print out all the options that user can pick to run the program
+    public static void testWelcome(){
         System.out.println("welcome to Student Management Program");
         System.out.println("please choose the section you want to do");
         System.out.println("1: display information");
@@ -23,8 +22,8 @@ public class Main implements StudentsEnrolmentManager {
         System.out.println("3: update student information");
         System.out.println("4: exit");
     }
-    public static String option(){
-        //The method that check user pick at welcome()
+
+    public static String testOption(){
         Scanner obj = new Scanner(System.in);
         try {
             String option = obj.nextLine();
@@ -599,10 +598,10 @@ public class Main implements StudentsEnrolmentManager {
 
         readFile();
         String option;
-        Main system = new Main();
+        testMain system = new testMain();
         do {
-            welcome();
-            option = option();
+            testWelcome();
+            option = testOption();
             try{
                 switch (Objects.requireNonNull(option)){
                     case "1": {
