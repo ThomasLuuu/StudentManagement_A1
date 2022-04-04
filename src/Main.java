@@ -12,6 +12,7 @@ public class Main implements StudentsEnrolmentManager {
     static String[] semester = {"2020A", "2020B", "2020C","2021A","2021B","2021C","2022A","2022B","2022C","2023A","2023B","2023C","2024A","2024B","2024C"};
     static ArrayList semesters = new ArrayList(Arrays.asList(semester));
 
+
     //TODO general Methods for processing this app
 
     public static void welcome(){
@@ -122,8 +123,9 @@ public class Main implements StudentsEnrolmentManager {
     private static void saveFile(String type, String fileName, List data) throws IOException {
         //This is the method that can help user to save the file
         String name = "src/"+fileName+".csv";
-        File csvFile = new File(name);
-        FileWriter fileWriter = new FileWriter(csvFile, true);
+        File csvfile = new File(name);
+        System.out.println(csvfile);
+        FileWriter fileWriter = new FileWriter(csvfile, true);
         //Append : true allow to save override to the exit file
         List<List<String>> al = new ArrayList<>();
         al = data;
@@ -246,14 +248,7 @@ public class Main implements StudentsEnrolmentManager {
         //this is Add method, users have to input Id, course and sem
         Students result1 = null;
         Courses result2 = null;
-//        System.out.println(studentsEnrolmentList);
-
-
         try{
-//            System.out.println("List of available students:");
-//            for (Students student : studentsList) {
-//                System.out.println(student.getId() + " " + student.getName());
-//            }
             while (result1 == null){
                 for (Students student : studentsList) {
                     if (student.getId().equalsIgnoreCase(sID)){
@@ -411,7 +406,6 @@ public class Main implements StudentsEnrolmentManager {
                 System.out.println("Re-enter your input");
             }
         }while (option==null);
-//        String result = obj2.nextLine();
         List<List<String>> al = new ArrayList<>();
         switch (Objects.requireNonNull(option)){
             case "1":{
@@ -422,7 +416,6 @@ public class Main implements StudentsEnrolmentManager {
                     if(studentsEnrolment.getStudents().getId().equals(studentSearch)){
                         String dataInput = studentsEnrolment.getCourses().getCourseName() + ", " + studentsEnrolment.getCourses().getCourseId();
                         System.out.println("This student has enrolled " + dataInput);
-//                        saveInfo.add(dataInput);
 
                         al.add(Arrays.asList(dataInput));
 
@@ -447,6 +440,7 @@ public class Main implements StudentsEnrolmentManager {
                                     "[1] YES" +
                                     "[2] NO");
                             String overRideChoice = obj2.nextLine();
+                            String overRideChoiceAccepted = csvFileName + getRandomNumberUsingNextInt(0,100);
                             switch (overRideChoice){
                                 case "1":{
                                     saveFile("student",csvFileName, al);
@@ -454,8 +448,8 @@ public class Main implements StudentsEnrolmentManager {
                                     break;
                                 }
                                 case "2":{
-                                    saveFile("student",csvFileName, al);
-                                    System.out.println("Save Successfully Override to the file: " + csvFileName + getRandomNumberUsingNextInt(0,100)+ ".csv");
+                                    saveFile("student",overRideChoice, al);
+                                    System.out.println("Save Successfully Override to the file: " + overRideChoice + ".csv");
                                     break;
                                 }
 
@@ -494,6 +488,7 @@ public class Main implements StudentsEnrolmentManager {
                         "[1] Yes" +
                         "[2] No");
                 String choice =obj2.nextLine();
+
                 switch (choice){
                     case "1":{
                         System.out.println("Type the file name you want to save: ");
@@ -503,6 +498,7 @@ public class Main implements StudentsEnrolmentManager {
                                     "[1] YES" +
                                     "[2] NO");
                             String overRideChoice = obj2.nextLine();
+                            String overRideChoiceAccepted = csvFileName + getRandomNumberUsingNextInt(0,100);
                             switch (overRideChoice){
                                 case "1":{
                                     saveFile("student",csvFileName, al);
@@ -510,8 +506,8 @@ public class Main implements StudentsEnrolmentManager {
                                     break;
                                 }
                                 case "2":{
-                                    saveFile("student",csvFileName, al);
-                                    System.out.println("Save Successfully Override to the file: " + csvFileName + getRandomNumberUsingNextInt(0,100)+ ".csv");
+                                    saveFile("student",overRideChoiceAccepted, al);
+                                    System.out.println("Save Successfully Override to the file: " + overRideChoiceAccepted + ".csv");
                                     break;
                                 }
 
@@ -550,6 +546,7 @@ public class Main implements StudentsEnrolmentManager {
                     case "1":{
                         System.out.println("Type the file name you want to save: ");
                         String csvFileName = obj2.nextLine();
+                        String overRideChoiceAccepted = csvFileName + getRandomNumberUsingNextInt(0,100);
                         if(checkFileExist(csvFileName)){
                             System.out.println("This file is exit in the system, do you want to override it? " +
                                     "[1] YES" +
@@ -562,8 +559,8 @@ public class Main implements StudentsEnrolmentManager {
                                     break;
                                 }
                                 case "2":{
-                                    saveFile("student",csvFileName, al);
-                                    System.out.println("Save Successfully Override to the file: " + csvFileName + getRandomNumberUsingNextInt(0,100)+ ".csv");
+                                    saveFile("student",overRideChoiceAccepted, al);
+                                    System.out.println("Save Successfully Override to the file: " +overRideChoiceAccepted+ ".csv");
                                     break;
                                 }
 

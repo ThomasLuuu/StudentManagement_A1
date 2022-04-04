@@ -5,5 +5,5 @@ public interface StudentsEnrolmentManager {
      void Update();
      void Delete(String sID) throws IOException;
      void GetOne() throws IOException;
-    void GetAll();
+     void GetAll();
 }

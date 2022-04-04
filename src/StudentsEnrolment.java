@@ -1,4 +1,4 @@
-public class StudentsEnrolment {
+public class StudentsEnrolment extends Main {
     Students students;
     Courses courses;
     String semester;
